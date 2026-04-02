@@ -32,7 +32,7 @@
             background-attachment: fixed;
         }
 
-        .container { max-width: 1300px; margin: 0 auto; }
+        .container { max-width: 1400px; margin: 0 auto; }
 
         header { 
             display: flex; 
@@ -68,7 +68,7 @@
         .search-box input { 
             width: 100%; 
             padding: 1rem 1rem 1rem 3.5rem; 
-            background: rgba(17, 24, 39, 0.9);
+            background: rgba(17, 24, 39, 0.95);
             backdrop-filter: blur(16px);
             border: 1px solid var(--border); 
             border-radius: 16px; 
@@ -84,7 +84,7 @@
         .filter-bar::-webkit-scrollbar { display: none; }
 
         .filter-chip {
-            padding: 6px 16px;
+            padding: 8px 18px;
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 100px;
@@ -105,90 +105,141 @@
         .btn-primary:hover { background: #7dd3fc; transform: translateY(-2px); }
         .btn-outline { background: rgba(17, 24, 39, 0.5); border: 1px solid var(--border); color: var(--text-main); }
         .btn-outline:hover { background: var(--surface-hover); }
-        .btn-danger { background: rgba(244, 63, 94, 0.1); color: var(--danger); border: 1px solid rgba(244, 63, 94, 0.2); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
 
+        /* Card Layout */
         .card { 
             background: var(--surface); 
             border: 1px solid var(--border); 
-            border-radius: 20px; 
+            border-radius: 24px; 
             padding: 1.5rem; 
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.25rem;
             position: relative;
             transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             animation: fadeIn 0.4s ease forwards;
         }
-        .card:hover { border-color: var(--accent); transform: translateY(-6px); background: var(--surface-hover); }
-        .card.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+        .card:hover { 
+            border-color: var(--accent); 
+            transform: translateY(-8px); 
+            background: #151c2c;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+        }
 
         .batch-check {
-            position: absolute; top: 15px; right: 15px; width: 20px; height: 20px;
+            position: absolute; top: 15px; right: 15px; width: 22px; height: 22px;
             border-radius: 6px; border: 2px solid var(--border); display: none; cursor: pointer;
+            background: var(--surface);
         }
         .batch-mode .batch-check { display: block; }
         .batch-check.active { background: var(--accent); border-color: var(--accent); }
 
-        .favicon {
-            width: 48px; height: 48px; border-radius: 14px; background: #1f2937;
-            display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
         }
 
-        .badge-container { display: flex; gap: 6px; align-items: center; }
+        .favicon-container {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .favicon-container img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        .badge-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
         .tag { 
-            font-size: 0.65rem; padding: 4px 10px; background: rgba(56, 189, 248, 0.1);
-            color: var(--accent); border-radius: 6px; font-weight: 800; text-transform: uppercase;
+            font-size: 0.65rem; padding: 4px 12px; background: rgba(56, 189, 248, 0.08);
+            color: var(--accent); border-radius: 8px; font-weight: 800; text-transform: uppercase;
+            border: 1px solid rgba(56, 189, 248, 0.15);
         }
         .browser-badge {
-            font-size: 0.6rem; padding: 4px 8px; background: #1e293b;
-            color: var(--text-dim); border-radius: 6px; display: flex; align-items: center; gap: 4px; border: 1px solid var(--border);
+            font-size: 0.65rem; padding: 4px 10px; background: rgba(255,255,255,0.03);
+            color: var(--text-dim); border-radius: 8px; display: flex; align-items: center; gap: 6px; border: 1px solid var(--border);
         }
 
-        .card-info h3 { font-size: 1.25rem; margin-top: 0.5rem; font-weight: 700; color: var(--text-main); }
-        .card-info p { 
-            font-size: 0.85rem; color: var(--text-dim); margin-top: 0.4rem; 
-            word-break: break-all; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+        .card-content h3 { 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            color: var(--text-main); 
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.02em;
+        }
+        .card-content p { 
+            font-size: 0.85rem; color: var(--text-dim); 
+            word-break: break-all; opacity: 0.6;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card-actions { 
             display: flex; justify-content: space-between; align-items: center; 
-            margin-top: auto; padding-top: 1.2rem; border-top: 1px solid var(--border);
+            margin-top: auto; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        .icon-btn { background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 10px; border-radius: 12px; transition: 0.2s; }
-        .icon-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
+        .action-group { display: flex; gap: 4px; }
+        .icon-btn { 
+            background: none; border: none; color: var(--text-dim); cursor: pointer; 
+            padding: 10px; border-radius: 12px; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .icon-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.08); }
         .icon-btn.del:hover { color: var(--danger); background: rgba(244, 63, 94, 0.1); }
 
+        /* Modal & Dialogs */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.92); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; 
+            background: rgba(0,0,0,0.92); backdrop-filter: blur(12px); z-index: 1000; align-items: center; justify-content: center; 
         }
         .modal { 
             background: var(--surface); border: 1px solid var(--border); 
-            padding: 2.5rem; border-radius: 28px; width: 95%; max-width: 500px;
-            max-height: 90vh; overflow-y: auto;
+            padding: 2.5rem; border-radius: 32px; width: 95%; max-width: 480px;
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5);
         }
 
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; color: var(--text-dim); font-size: 0.85rem; font-weight: 600; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.6rem; color: var(--text-dim); font-size: 0.85rem; font-weight: 600; }
         .form-group input, .form-group select { 
-            width: 100%; padding: 0.9rem; background: #030712; border: 1px solid var(--border); 
-            border-radius: 12px; color: white; font-size: 1rem; outline: none;
+            width: 100%; padding: 1rem; background: #030712; border: 1px solid var(--border); 
+            border-radius: 14px; color: white; font-size: 1rem; outline: none; transition: 0.2s;
+        }
+        .form-group input:focus { border-color: var(--accent); }
+
+        /* Quick-Copy Toast-like Overlay */
+        #browserMismatchOverlay {
+            display: none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            background: #1e293b; border: 1px solid var(--accent); color: white;
+            padding: 1rem 2rem; border-radius: 20px; z-index: 2000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            align-items: center; gap: 1.5rem; animation: slideUp 0.3s ease;
         }
 
-        .footer-tools {
-            margin-top: 4rem; padding: 2rem 0; display: flex; justify-content: center; gap: 1.5rem; border-top: 1px solid var(--border);
-        }
+        @keyframes slideUp { from { bottom: -5rem; opacity: 0; } to { bottom: 2rem; opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        #emptyState { grid-column: 1 / -1; text-align: center; padding: 8rem 2rem; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        #emptyState { grid-column: 1 / -1; text-align: center; padding: 10rem 2rem; color: var(--text-dim); }
     </style>
 </head>
 <body>
@@ -198,7 +249,7 @@
         <div class="logo-area">
             <h1>TECH<span style="color: var(--accent);">HUB</span></h1>
         </div>
-        <div style="display: flex; gap: 0.8rem;">
+        <div style="display: flex; gap: 1rem;">
             <button id="batchBtn" class="btn btn-outline" onclick="toggleBatchMode()">
                 <i data-lucide="layers" size="18"></i> Batch Mode
             </button>
@@ -212,15 +263,15 @@
         <div class="toolbar">
             <div class="search-box">
                 <i data-lucide="search"></i>
-                <input type="text" id="searchInput" placeholder="Search name, URL, or browser tag..." onkeyup="refreshUI()">
+                <input type="text" id="searchInput" placeholder="Search saved sites..." onkeyup="refreshUI()">
             </div>
-            <button id="deleteSelectedBtn" class="btn btn-danger" style="display: none;" onclick="deleteSelected()">
+            <button id="deleteSelectedBtn" class="btn btn-danger" style="display: none; background: var(--danger); color: white;" onclick="deleteSelected()">
                 Delete Selected (<span id="selectedCount">0</span>)
             </button>
         </div>
         
         <div class="filter-bar" id="filterBar">
-            <div class="filter-chip active" onclick="setFilter('All', this)">All</div>
+            <div class="filter-chip active" onclick="setFilter('All', this)">All Collections</div>
             <div class="filter-chip" onclick="setFilter('Work', this)">Work</div>
             <div class="filter-chip" onclick="setFilter('Tools', this)">Tools</div>
             <div class="filter-chip" onclick="setFilter('Design', this)">Design</div>
@@ -232,53 +283,72 @@
 
     <div class="grid" id="bookmarkGrid"></div>
 
-    <div class="footer-tools">
+    <div style="margin-top: 5rem; padding: 3rem 0; display: flex; justify-content: center; gap: 1.5rem; border-top: 1px solid var(--border);">
         <button class="btn btn-outline" onclick="exportJSON()">
-            <i data-lucide="download" size="16"></i> Backup
+            <i data-lucide="database" size="16"></i> Backup Cloud
         </button>
         <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">
-            <i data-lucide="upload" size="16"></i> Restore
+            <i data-lucide="refresh-ccw" size="16"></i> Restore
         </button>
         <input type="file" id="importFile" hidden accept=".json" onchange="importJSON(event)">
     </div>
 </div>
 
+<!-- Mismatch Helper Overlay -->
+<div id="browserMismatchOverlay">
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <i data-lucide="info" style="color: var(--accent);"></i>
+        <div>
+            <p style="font-weight: 700; font-size: 0.9rem;">Browser Mismatch</p>
+            <p id="mismatchText" style="font-size: 0.75rem; opacity: 0.7;">This link is for Chrome.</p>
+        </div>
+    </div>
+    <button class="btn btn-primary" id="copyAndCloseBtn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+        Copy Link & Close
+    </button>
+    <button onclick="hideMismatch()" style="background: none; border: none; color: white; cursor: pointer; opacity: 0.5;">
+        <i data-lucide="x" size="16"></i>
+    </button>
+</div>
+
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
-        <h2 id="modalTitle" style="margin-bottom: 1.5rem; font-weight: 800;">Manage Link</h2>
+        <h2 id="modalTitle" style="margin-bottom: 2rem; font-weight: 900; letter-spacing: -1px; font-size: 1.8rem;">Add Shortcut</h2>
         <input type="hidden" id="editId">
         <div class="form-group">
-            <label>Site Name</label>
+            <label>Title</label>
             <input type="text" id="siteName" placeholder="e.g. GitHub">
         </div>
         <div class="form-group">
-            <label>URL (Auto-validates)</label>
+            <label>URL</label>
             <input type="url" id="siteUrl" placeholder="https://github.com">
         </div>
-        <div class="form-group">
-            <label>Default Browser Target</label>
-            <select id="siteBrowser">
-                <option value="Default">System Default</option>
-                <option value="Chrome">Google Chrome</option>
-                <option value="Firefox">Mozilla Firefox</option>
-                <option value="Safari">Safari</option>
-                <option value="Edge">Microsoft Edge</option>
-                <option value="Brave">Brave</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Category</label>
-            <select id="siteCategory">
-                <option value="Work">Work</option>
-                <option value="Tools">Tools</option>
-                <option value="Design">Design</option>
-                <option value="Learning">Learning</option>
-                <option value="Entertainment">Entertainment</option>
-                <option value="Social">Social</option>
-            </select>
+        <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+                <label>Browser Target</label>
+                <select id="siteBrowser">
+                    <option value="Default">Auto</option>
+                    <option value="Chrome">Chrome</option>
+                    <option value="Firefox">Firefox</option>
+                    <option value="Safari">Safari</option>
+                    <option value="Edge">Edge</option>
+                    <option value="Brave">Brave</option>
+                </select>
+            </div>
+            <div>
+                <label>Category</label>
+                <select id="siteCategory">
+                    <option value="Work">Work</option>
+                    <option value="Tools">Tools</option>
+                    <option value="Design">Design</option>
+                    <option value="Learning">Learning</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Social">Social</option>
+                </select>
+            </div>
         </div>
         <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-            <button class="btn btn-primary" style="flex: 2" onclick="handleSave()">Save Link</button>
+            <button class="btn btn-primary" style="flex: 2" onclick="handleSave()">Save Shortcut</button>
             <button class="btn btn-outline" style="flex: 1" onclick="closeModal()">Cancel</button>
         </div>
     </div>
@@ -292,6 +362,16 @@
     let currentFilter = 'All';
     let selectedIds = new Set();
     let isBatchMode = false;
+
+    // Detect Current Browser
+    const detectBrowser = () => {
+        const ua = navigator.userAgent;
+        if (ua.includes("Edg/")) return "Edge";
+        if (ua.includes("Chrome") && !ua.includes("Edg/")) return "Chrome";
+        if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+        if (ua.includes("Firefox")) return "Firefox";
+        return "Default";
+    };
 
     const initDB = () => {
         return new Promise((resolve, reject) => {
@@ -309,11 +389,44 @@
 
     const getAll = () => {
         return new Promise(res => {
+            if (!db) return res([]);
             const transaction = db.transaction([STORE_NAME], 'readonly');
             const request = transaction.objectStore(STORE_NAME).getAll();
             request.onsuccess = () => res(request.result || []);
         });
     };
+
+    async function handleOpenSite(url, targetBrowser) {
+        const current = detectBrowser();
+        
+        // If it's a specific target browser and doesn't match current
+        if (targetBrowser !== 'Default' && targetBrowser !== current) {
+            showMismatch(url, targetBrowser);
+            return;
+        }
+
+        window.open(url, '_blank');
+    }
+
+    function showMismatch(url, target) {
+        const overlay = document.getElementById('browserMismatchOverlay');
+        const text = document.getElementById('mismatchText');
+        const btn = document.getElementById('copyAndCloseBtn');
+        
+        text.innerText = `Intended for ${target}. You are using ${detectBrowser()}.`;
+        overlay.style.display = 'flex';
+        
+        btn.onclick = () => {
+            copyUrl(url);
+            hideMismatch();
+            // Still try to open it just in case
+            window.open(url, '_blank');
+        };
+    }
+
+    function hideMismatch() {
+        document.getElementById('browserMismatchOverlay').style.display = 'none';
+    }
 
     async function refreshUI() {
         if (!db) return;
@@ -333,42 +446,45 @@
         grid.innerHTML = '';
         if(filtered.length === 0) {
             grid.innerHTML = `<div id="emptyState">
-                <i data-lucide="compass" size="64" style="margin-bottom: 1.5rem; opacity: 0.1;"></i>
-                <h2 style="opacity: 0.3;">No links found</h2>
+                <i data-lucide="cloud-off" size="64" style="margin-bottom: 1.5rem; opacity: 0.15;"></i>
+                <h2 style="opacity: 0.4;">Empty workspace</h2>
             </div>`;
         } else {
             filtered.forEach((item, index) => {
-                const favicon = `https://www.google.com/s2/favicons?sz=128&domain=${item.url}`;
+                let domain = 'example.com';
+                try { domain = new URL(item.url).hostname; } catch(e) {}
+                
+                const favicon = `https://www.google.com/s2/favicons?sz=128&domain=${domain}`;
                 const isSelected = selectedIds.has(item.id);
                 const browser = item.browser || 'Default';
                 
                 let bIcon = 'globe';
                 if(browser === 'Chrome') bIcon = 'chrome';
-                if(browser === 'Firefox') bIcon = 'flame';
-                if(browser === 'Safari') bIcon = 'compass';
-                if(browser === 'Edge') bIcon = 'layout';
-                if(browser === 'Brave') bIcon = 'shield';
+                else if(browser === 'Firefox') bIcon = 'flame';
+                else if(browser === 'Safari') bIcon = 'compass';
+                else if(browser === 'Edge') bIcon = 'layout';
+                else if(browser === 'Brave') bIcon = 'shield';
 
                 grid.innerHTML += `
-                    <div class="card ${isSelected ? 'selected' : ''}" style="animation-delay: ${index * 0.03}s" onclick="handleCardClick(${item.id})">
+                    <div class="card ${isSelected ? 'selected' : ''}" style="animation-delay: ${index * 0.02}s" onclick="handleCardClick(${item.id})">
                         <div class="batch-check ${isSelected ? 'active' : ''}"></div>
-                        <div class="card-top">
-                            <div class="favicon">
-                                <img src="${favicon}" alt="" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${item.name}'" style="width: 26px; height: 26px; border-radius: 4px;">
+                        <div class="card-header">
+                            <div class="favicon-container">
+                                <img src="${favicon}" alt="" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${item.name}'">
                             </div>
-                            <div class="badge-container">
+                            <div class="badge-stack">
                                 ${browser !== 'Default' ? `<span class="browser-badge"><i data-lucide="${bIcon}" size="10"></i> ${browser}</span>` : ''}
                                 <span class="tag">${item.category}</span>
                             </div>
                         </div>
-                        <div class="card-info">
+                        <div class="card-content">
                             <h3>${item.name}</h3>
                             <p>${item.url}</p>
                         </div>
                         <div class="card-actions">
-                            <a href="${item.url}" target="_blank" class="btn btn-primary" style="padding: 0.6rem 1rem; font-size: 0.8rem" onclick="event.stopPropagation()">Open</a>
-                            <div class="icon-group">
-                                <button title="Copy Link" class="icon-btn" onclick="event.stopPropagation(); copyUrl('${item.url}')"><i data-lucide="copy" size="18"></i></button>
+                            <button class="btn btn-primary" style="padding: 0.6rem 1.4rem; font-size: 0.85rem" onclick="event.stopPropagation(); handleOpenSite('${item.url}', '${browser}')">Open Shortcut</button>
+                            <div class="action-group">
+                                <button title="Copy" class="icon-btn" onclick="event.stopPropagation(); copyUrl('${item.url}')"><i data-lucide="copy" size="18"></i></button>
                                 <button title="Edit" class="icon-btn" onclick="event.stopPropagation(); openModal(true, ${item.id})"><i data-lucide="edit-3" size="18"></i></button>
                                 <button title="Delete" class="icon-btn del" onclick="event.stopPropagation(); handleDelete(${item.id})"><i data-lucide="trash-2" size="18"></i></button>
                             </div>
@@ -387,6 +503,7 @@
         el.select();
         document.execCommand('copy');
         document.body.removeChild(el);
+        // Show temporary feedback would be nice here but let's keep it simple
     }
 
     function setFilter(cat, el) {
@@ -419,14 +536,13 @@
 
     async function deleteSelected() {
         if(selectedIds.size === 0) return;
-        if(confirm(`Permanently remove ${selectedIds.size} links?`)) {
+        if(confirm(`Remove ${selectedIds.size} items?`)) {
             const tx = db.transaction([STORE_NAME], 'readwrite');
             const store = tx.objectStore(STORE_NAME);
             selectedIds.forEach(id => store.delete(id));
             selectedIds.clear();
             updateSelectedCount();
-            await tx.oncomplete;
-            refreshUI();
+            tx.oncomplete = () => refreshUI();
         }
     }
 
@@ -438,7 +554,7 @@
         const browser = document.getElementById('siteBrowser').value;
 
         if(!name || !url) return;
-        if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+        if (!url.startsWith('http')) url = 'https://' + url;
 
         const tx = db.transaction([STORE_NAME], 'readwrite');
         const store = tx.objectStore(STORE_NAME);
@@ -454,7 +570,7 @@
     }
 
     async function handleDelete(id) {
-        if(confirm("Remove this link?")) {
+        if(confirm("Remove this shortcut?")) {
             const tx = db.transaction([STORE_NAME], 'readwrite');
             tx.objectStore(STORE_NAME).delete(id);
             tx.oncomplete = () => refreshUI();
@@ -464,7 +580,7 @@
     function openModal(isEdit = false, id = null) {
         document.getElementById('modalOverlay').style.display = 'flex';
         if(isEdit) {
-            document.getElementById('modalTitle').innerText = "Edit Link";
+            document.getElementById('modalTitle').innerText = "Edit Shortcut";
             getAll().then(list => {
                 const item = list.find(b => b.id === id);
                 if (item) {
@@ -476,7 +592,7 @@
                 }
             });
         } else {
-            document.getElementById('modalTitle').innerText = "Add New Link";
+            document.getElementById('modalTitle').innerText = "Add Shortcut";
             document.getElementById('editId').value = '';
             document.getElementById('siteName').value = '';
             document.getElementById('siteUrl').value = '';
@@ -507,18 +623,15 @@
                 const store = tx.objectStore(STORE_NAME);
                 data.forEach(item => {
                     const cleanItem = { 
-                        name: item.name || 'Imported Link', 
+                        name: item.name || 'Link', 
                         url: item.url || '#', 
-                        category: item.category || 'Tools', 
+                        category: item.category || 'Work', 
                         browser: item.browser || 'Default' 
                     };
                     store.add(cleanItem);
                 });
-                tx.oncomplete = () => {
-                    refreshUI();
-                    alert("Import successful!");
-                };
-            } catch(err) { alert("Invalid backup file."); }
+                tx.oncomplete = () => { refreshUI(); };
+            } catch(err) { alert("Error reading backup."); }
         };
         reader.readAsText(file);
     }
@@ -527,7 +640,7 @@
         try {
             await initDB(); 
             refreshUI(); 
-        } catch(e) { console.error("DB Init Failed", e); }
+        } catch(e) { console.error("Initialization Failed", e); }
     };
 </script>
 
