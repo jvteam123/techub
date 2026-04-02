@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TECHHUB | Your Professional Workspace</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg: #030712;
+            --surface: #111827;
+            --surface-hover: #1f2937;
+            --border: #374151;
+            --text-main: #f9fafb;
+            --text-dim: #9ca3af;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.2);
+            --danger: #f43f5e;
+            --success: #10b981;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            padding: 1.5rem;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1300px; margin: 0 auto; }
+
+        /* Header */
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-area h1 { 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            font-size: 2.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Toolbar & Filters */
+        .toolbar-wrapper {
+            position: sticky;
+            top: 1rem;
+            z-index: 100;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .toolbar { 
+            display: flex; 
+            gap: 1rem; 
+        }
+
+        .search-box { 
+            flex: 1; 
+            position: relative; 
+        }
+
+        .search-box input { 
+            width: 100%; 
+            padding: 1rem 1rem 1rem 3.5rem; 
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border); 
+            border-radius: 16px; 
+            color: white; 
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus { 
+            border-color: var(--accent); 
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+
+        .search-box i { 
+            position: absolute; 
+            left: 1.2rem; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: var(--text-dim); 
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .filter-chip {
+            padding: 6px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+            color: var(--text-dim);
+        }
+
+        .filter-chip.active {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn { 
+            padding: 0.8rem 1.5rem; border-radius: 14px; border: none; 
+            cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { background: #7dd3fc; transform: translateY(-2px); }
+        .btn-outline { background: rgba(17, 24, 39, 0.5); border: 1px solid var(--border); color: var(--text-main); }
+        .btn-outline:hover { background: var(--surface-hover); }
+        .btn-danger { background: rgba(244, 63, 94, 0.1); color: var(--danger); border: 1px solid rgba(244, 63, 94, 0.2); }
+        .btn-danger:hover { background: var(--danger); color: white; }
+
+        /* Grid */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 1.5rem; 
+        }
+
+        .card { 
+            background: var(--surface); 
+            border: 1px solid var(--border); 
+            border-radius: 20px; 
+            padding: 1.5rem; 
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .card:hover { 
+            border-color: var(--accent); 
+            transform: translateY(-6px);
+            background: var(--surface-hover);
+        }
+
+        .card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .batch-check {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid var(--border);
+            display: none;
+            cursor: pointer;
+        }
+
+        .batch-mode .batch-check { display: block; }
+        .batch-check.active { background: var(--accent); border-color: var(--accent); }
+
+        .favicon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #1f2937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .tag { 
+            font-size: 0.65rem; 
+            padding: 4px 10px;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            border-radius: 6px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .browser-badge {
+            font-size: 0.6rem;
+            padding: 4px 8px;
+            background: #1e293b;
+            color: var(--text-dim);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .card-info h3 { font-size: 1.25rem; margin-top: 0.5rem; font-weight: 700; color: var(--text-main); }
+        .card-info p { 
+            font-size: 0.85rem; 
+            color: var(--text-dim); 
+            margin-top: 0.4rem; 
+            word-break: break-all;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-actions { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-top: auto; 
+            padding-top: 1.2rem; 
+            border-top: 1px solid var(--border);
+        }
+
+        .icon-btn { 
+            background: none; border: none; color: var(--text-dim); 
+            cursor: pointer; padding: 10px; border-radius: 12px; transition: 0.2s;
+        }
+        .icon-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
+        .icon-btn.del:hover { color: var(--danger); background: rgba(244, 63, 94, 0.1); }
+
+        /* Modals */
+        .modal-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.92); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; 
+        }
+        .modal { 
+            background: var(--surface); border: 1px solid var(--border); 
+            padding: 2.5rem; border-radius: 28px; width: 90%; max-width: 500px;
+            max-height: 90vh; overflow-y: auto;
+        }
+
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: var(--text-dim); font-size: 0.85rem; font-weight: 600; }
+        .form-group input, .form-group select { 
+            width: 100%; padding: 0.9rem; background: #030712; border: 1px solid var(--border); 
+            border-radius: 12px; color: white; font-size: 1rem; outline: none;
+        }
+
+        /* Utility Footer */
+        .footer-tools {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        #emptyState { grid-column: 1 / -1; text-align: center; padding: 8rem 2rem; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo-area">
+            <h1>TECH<span style="color: var(--accent);">HUB</span></h1>
+        </div>
+        <div style="display: flex; gap: 0.8rem;">
+            <button id="batchBtn" class="btn btn-outline" onclick="toggleBatchMode()">
+                <i data-lucide="layers" size="18"></i> Batch Mode
+            </button>
+            <button class="btn btn-primary" onclick="openModal()">
+                <i data-lucide="plus" size="20"></i> New Site
+            </button>
+        </div>
+    </header>
+
+    <div class="toolbar-wrapper">
+        <div class="toolbar">
+            <div class="search-box">
+                <i data-lucide="search"></i>
+                <input type="text" id="searchInput" placeholder="Search by name, browser, or tag..." onkeyup="refreshUI()">
+            </div>
+            <button id="deleteSelectedBtn" class="btn btn-danger" style="display: none;" onclick="deleteSelected()">
+                Delete Selected (<span id="selectedCount">0</span>)
+            </button>
+        </div>
+        
+        <div class="filter-bar" id="filterBar">
+            <div class="filter-chip active" onclick="setFilter('All', this)">All</div>
+            <div class="filter-chip" onclick="setFilter('Work', this)">Work</div>
+            <div class="filter-chip" onclick="setFilter('Tools', this)">Tools</div>
+            <div class="filter-chip" onclick="setFilter('Design', this)">Design</div>
+            <div class="filter-chip" onclick="setFilter('Learning', this)">Learning</div>
+            <div class="filter-chip" onclick="setFilter('Entertainment', this)">Entertainment</div>
+            <div class="filter-chip" onclick="setFilter('Social', this)">Social</div>
+        </div>
+    </div>
+
+    <div class="grid" id="bookmarkGrid"></div>
+
+    <div class="footer-tools">
+        <button class="btn btn-outline" onclick="exportJSON()">
+            <i data-lucide="download" size="16"></i> Backup Data
+        </button>
+        <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">
+            <i data-lucide="upload" size="16"></i> Restore Data
+        </button>
+        <input type="file" id="importFile" hidden accept=".json" onchange="importJSON(event)">
+    </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <h2 id="modalTitle" style="margin-bottom: 1.5rem; font-weight: 800;">Manage Link</h2>
+        <input type="hidden" id="editId">
+        
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="siteName" placeholder="e.g. Stack Overflow">
+        </div>
+        
+        <div class="form-group">
+            <label>Link (URL)</label>
+            <input type="url" id="siteUrl" placeholder="https://...">
+        </div>
+
+        <div class="form-group">
+            <label>Preferred Browser (Visual Tag)</label>
+            <select id="siteBrowser">
+                <option value="Default">System Default</option>
+                <option value="Chrome">Google Chrome</option>
+                <option value="Firefox">Mozilla Firefox</option>
+                <option value="Safari">Safari</option>
+                <option value="Edge">Microsoft Edge</option>
+                <option value="Brave">Brave</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Category</label>
+            <select id="siteCategory">
+                <option value="Work">Work</option>
+                <option value="Tools">Tools</option>
+                <option value="Design">Design</option>
+                <option value="Learning">Learning</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Social">Social</option>
+            </select>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button class="btn btn-primary" style="flex: 2" onclick="handleSave()">Confirm</button>
+            <button class="btn btn-outline" style="flex: 1" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- DATABASE ---
+    const DB_NAME = 'TechHubDB';
+    const DB_VERSION = 2; // Updated version to support browser field
+    const STORE_NAME = 'links';
+    let db;
+    let currentFilter = 'All';
+    let selectedIds = new Set();
+    let isBatchMode = false;
+
+    const initDB = () => {
+        return new Promise((resolve) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains(STORE_NAME)) {
+                    db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                }
+            };
+            request.onsuccess = (e) => { db = e.target.result; resolve(); };
+        });
+    };
+
+    const getAll = () => {
+        return new Promise(res => {
+            const transaction = db.transaction([STORE_NAME], 'readonly');
+            const request = transaction.objectStore(STORE_NAME).getAll();
+            request.onsuccess = () => res(request.result);
+        });
+    };
+
+    // --- LOGIC ---
+    async function refreshUI() {
+        const list = await getAll();
+        const grid = document.getElementById('bookmarkGrid');
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        
+        const filtered = list.filter(item => {
+            const matchesQuery = item.name.toLowerCase().includes(query) || 
+                               item.url.toLowerCase().includes(query) ||
+                               (item.browser && item.browser.toLowerCase().includes(query));
+            const matchesFilter = currentFilter === 'All' || item.category === currentFilter;
+            return matchesQuery && matchesFilter;
+        });
+
+        grid.innerHTML = '';
+        if(filtered.length === 0) {
+            grid.innerHTML = `<div id="emptyState">
+                <i data-lucide="compass" size="64" style="margin-bottom: 1.5rem; opacity: 0.2;"></i>
+                <h2 style="opacity: 0.5;">No results found</h2>
+            </div>`;
+        } else {
+            filtered.forEach((item, index) => {
+                const favicon = `https://www.google.com/s2/favicons?sz=128&domain=${item.url}`;
+                const isSelected = selectedIds.has(item.id);
+                const browser = item.browser || 'Default';
+                
+                // Determine icon for browser badge
+                let browserIcon = 'globe';
+                if(browser === 'Chrome') browserIcon = 'chrome';
+                if(browser === 'Firefox') browserIcon = 'flame'; // Closest to fox
+                if(browser === 'Safari') browserIcon = 'compass';
+                if(browser === 'Edge') browserIcon = 'layout';
+                if(browser === 'Brave') browserIcon = 'shield';
+
+                grid.innerHTML += `
+                    <div class="card ${isSelected ? 'selected' : ''}" style="animation-delay: ${index * 0.05}s" onclick="handleCardClick(${item.id})">
+                        <div class="batch-check ${isSelected ? 'active' : ''}"></div>
+                        <div class="card-top">
+                            <div class="favicon">
+                                <img src="${favicon}" alt="" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${item.name}'" style="width: 28px; height: 28px;">
+                            </div>
+                            <div class="badge-container">
+                                ${browser !== 'Default' ? `<span class="browser-badge"><i data-lucide="${browserIcon}" size="10"></i> ${browser}</span>` : ''}
+                                <span class="tag">${item.category}</span>
+                            </div>
+                        </div>
+                        <div class="card-info">
+                            <h3>${item.name}</h3>
+                            <p>${item.url}</p>
+                        </div>
+                        <div class="card-actions">
+                            <a href="${item.url}" target="_blank" class="btn btn-outline" style="padding: 0.6rem 1rem; font-size: 0.8rem" onclick="event.stopPropagation()">Visit Site</a>
+                            <div class="icon-group">
+                                <button class="icon-btn" onclick="event.stopPropagation(); openModal(true, ${item.id})"><i data-lucide="edit-3" size="18"></i></button>
+                                <button class="icon-btn del" onclick="event.stopPropagation(); handleDelete(${item.id})"><i data-lucide="trash-2" size="18"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        lucide.createIcons();
+    }
+
+    function setFilter(cat, el) {
+        currentFilter = cat;
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        refreshUI();
+    }
+
+    function toggleBatchMode() {
+        isBatchMode = !isBatchMode;
+        document.body.classList.toggle('batch-mode', isBatchMode);
+        document.getElementById('batchBtn').classList.toggle('btn-primary', isBatchMode);
+        document.getElementById('deleteSelectedBtn').style.display = isBatchMode ? 'flex' : 'none';
+        if(!isBatchMode) { selectedIds.clear(); updateSelectedCount(); }
+        refreshUI();
+    }
+
+    function handleCardClick(id) {
+        if(!isBatchMode) return;
+        if(selectedIds.has(id)) selectedIds.delete(id);
+        else selectedIds.add(id);
+        updateSelectedCount();
+        refreshUI();
+    }
+
+    function updateSelectedCount() {
+        document.getElementById('selectedCount').innerText = selectedIds.size;
+    }
+
+    async function deleteSelected() {
+        if(selectedIds.size === 0) return;
+        if(confirm(`Delete ${selectedIds.size} bookmarks?`)) {
+            const tx = db.transaction([STORE_NAME], 'readwrite');
+            const store = tx.objectStore(STORE_NAME);
+            selectedIds.forEach(id => store.delete(id));
+            selectedIds.clear();
+            updateSelectedCount();
+            await tx.complete;
+            refreshUI();
+        }
+    }
+
+    async function handleSave() {
+        const id = document.getElementById('editId').value;
+        const name = document.getElementById('siteName').value;
+        const url = document.getElementById('siteUrl').value;
+        const category = document.getElementById('siteCategory').value;
+        const browser = document.getElementById('siteBrowser').value;
+
+        if(!name || !url) return;
+
+        const tx = db.transaction([STORE_NAME], 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const data = { name, url, category, browser };
+        
+        if(id) { 
+            data.id = parseInt(id); 
+            store.put(data); 
+        } else { 
+            store.add(data); 
+        }
+        
+        await tx.complete;
+        closeModal();
+        refreshUI();
+    }
+
+    async function handleDelete(id) {
+        if(confirm("Remove this link?")) {
+            const tx = db.transaction([STORE_NAME], 'readwrite');
+            tx.objectStore(STORE_NAME).delete(id);
+            await tx.complete;
+            refreshUI();
+        }
+    }
+
+    function openModal(isEdit = false, id = null) {
+        document.getElementById('modalOverlay').style.display = 'flex';
+        if(isEdit) {
+            getAll().then(list => {
+                const item = list.find(b => b.id === id);
+                document.getElementById('editId').value = id;
+                document.getElementById('siteName').value = item.name;
+                document.getElementById('siteUrl').value = item.url;
+                document.getElementById('siteCategory').value = item.category;
+                document.getElementById('siteBrowser').value = item.browser || 'Default';
+            });
+        } else {
+            document.getElementById('editId').value = '';
+            document.getElementById('siteName').value = '';
+            document.getElementById('siteUrl').value = '';
+            document.getElementById('siteBrowser').value = 'Default';
+            document.getElementById('siteCategory').value = 'Work';
+        }
+    }
+
+    function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+
+    async function exportJSON() {
+        const list = await getAll();
+        const blob = new Blob([JSON.stringify(list, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `techhub_backup_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+    }
+
+    function importJSON(e) {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            try {
+                const data = JSON.parse(event.target.result);
+                const tx = db.transaction([STORE_NAME], 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                data.forEach(item => {
+                    const cleanItem = { 
+                        name: item.name, 
+                        url: item.url, 
+                        category: item.category, 
+                        browser: item.browser || 'Default' 
+                    };
+                    store.add(cleanItem);
+                });
+                await tx.complete;
+                refreshUI();
+                alert("Data restored successfully!");
+            } catch(err) { alert("Error importing file."); }
+        };
+        reader.readAsText(file);
+    }
+
+    window.onload = async () => { await initDB(); refreshUI(); };
+</script>
+
+</body>
+</html>
